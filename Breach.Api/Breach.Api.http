@@ -1,0 +1,6 @@
+@Breach.Api_HostAddress = http://localhost:5058
+
+GET {{Breach.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
