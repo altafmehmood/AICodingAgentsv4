@@ -1,6 +1,28 @@
-@Breach.Api_HostAddress = http://localhost:5058
+@Breach.Api_HostAddress = http://localhost:5049
 
 GET {{Breach.Api_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+# Get all breaches
+GET {{Breach.Api_HostAddress}}/api/breach
+Accept: application/json
+
+###
+
+# Get breaches for a specific email
+GET {{Breach.Api_HostAddress}}/api/breach/email/test@example.com
+Accept: application/json
+
+###
+
+# Analyze risk for a specific email
+GET {{Breach.Api_HostAddress}}/api/breach/analyze/test@example.com
+Accept: application/json
+
+###
+
+# Generate PDF report for a specific email
+GET {{Breach.Api_HostAddress}}/api/breach/report/test@example.com
+Accept: application/pdf

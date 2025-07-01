@@ -1,10 +1,12 @@
 ﻿namespace Breach.Api.Tests;
 
-public class UnitTest1
+public class SampleTests
 {
     [Fact]
-    public void Test1()
+    public void SampleTest_ShouldPass()
     {
-
+        // This is a placeholder test to ensure the test project is working
+        // Replace with actual tests for your application
+        Assert.True(true);
     }
 }
