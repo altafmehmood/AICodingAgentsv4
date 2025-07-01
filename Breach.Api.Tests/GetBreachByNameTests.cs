@@ -3,7 +3,7 @@ using Xunit;
 using NSubstitute;
 using System.Threading.Tasks;
 using Breach.Api.Features.Breaches;
-using Microsoft.Extensions.Configuration;
+
 using System.Threading;
 using Flurl.Http.Testing;
 using System;
@@ -17,10 +17,7 @@ namespace Breach.Api.Tests
         {
             // Arrange
             using var httpTest = new HttpTest();
-            var configuration = Substitute.For<IConfiguration>();
-            configuration["HaveIBeenPwnedApiKey"].Returns("test_key");
-
-            var handler = new GetBreachByName.Handler(configuration);
+            var handler = new GetBreachByName.Handler();
             var query = new GetBreachByName.Query("Adobe");
 
             var expectedBreach = new GetBreachByName.Breach
