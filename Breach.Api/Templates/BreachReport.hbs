@@ -1,0 +1,21 @@
+<html>
+<head>
+    <title>Breach Report - {{Name}}</title>
+</head>
+<body>
+    <h1>Breach Report - {{Name}}</h1>
+    <p><strong>Title:</strong> {{Title}}</p>
+    <p><strong>Domain:</strong> {{Domain}}</p>
+    <p><strong>Breach Date:</strong> {{BreachDate}}</p>
+    <p><strong>Pwn Count:</strong> {{PwnCount}}</p>
+    <p><strong>Description:</strong> {{Description}}</p>
+    <p><strong>Data Classes:</strong></p>
+    <ul>
+        {{#each DataClasses}}
+        <li>{{this}}</li>
+        {{/each}}
+    </ul>
+    <h2>Risk Analysis</h2>
+    <p>{{RiskAnalysis}}</p>
+</body>
+</html>
