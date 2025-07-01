@@ -3,16 +3,17 @@ using MediatR;
 using Flurl.Http;
 using System.Threading.Tasks;
 using System.Threading;
-using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Breach.Api.Features.Breaches
 {
-    public static class GetBreachByName
+    public static class GetBreachesByEmail
     {
-        public record Query(string Name) : IRequest<Breach?>;
+        public record Query(string Email) : IRequest<IEnumerable<Breach>>;
 
-        public class Handler : IRequestHandler<Query, Breach?>
+        public class Handler : IRequestHandler<Query, IEnumerable<Breach>>
         {
             private readonly ILogger<Handler> _logger;
 
@@ -21,31 +22,28 @@ namespace Breach.Api.Features.Breaches
                 _logger = logger;
             }
 
-            public async Task<Breach?> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<IEnumerable<Breach>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var baseUrl = "https://haveibeenpwned.com/api/v3/breach/";
+                var baseUrl = $"https://haveibeenpwned.com/api/v3/breachedaccount/{request.Email}";
 
                 try
                 {
-                    var breach = await new Flurl.Url(baseUrl)
-                        .AppendPathSegment(request.Name)
-                        .GetJsonAsync<Breach>(cancellationToken: cancellationToken);
-
-                    return breach;
+                    var breaches = await baseUrl.GetJsonAsync<IEnumerable<Breach>>(cancellationToken: cancellationToken);
+                    return breaches;
                 }
                 catch (FlurlHttpException ex) when (ex.StatusCode == 404)
                 {
-                    _logger.LogInformation("No breach found for the given name (404 Not Found).");
-                    return null;
+                    _logger.LogInformation("No breaches found for the given email (404 Not Found).");
+                    return new List<Breach>(); // Return empty list if no breaches found
                 }
                 catch (FlurlHttpException ex)
                 {
-                    _logger.LogError(ex, "Flurl HTTP error occurred while fetching breach by name: {StatusCode} - {Message}", ex.StatusCode, ex.Message);
+                    _logger.LogError(ex, "Flurl HTTP error occurred while fetching breaches by email: {StatusCode} - {Message}", ex.StatusCode, ex.Message);
                     throw; // Re-throw the exception after logging
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "An unexpected error occurred while fetching breach by name.");
+                    _logger.LogError(ex, "An unexpected error occurred while fetching breaches by email.");
                     throw; // Re-throw the exception after logging
                 }
             }

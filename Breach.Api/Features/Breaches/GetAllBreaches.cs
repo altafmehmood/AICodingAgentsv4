@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 using System.Collections.Generic;
-
+using Microsoft.Extensions.Logging;
 
 namespace Breach.Api.Features.Breaches
 {
@@ -15,8 +15,11 @@ namespace Breach.Api.Features.Breaches
 
         public class Handler : IRequestHandler<Query, IEnumerable<Breach>>
         {
-            public Handler()
+            private readonly ILogger<Handler> _logger;
+
+            public Handler(ILogger<Handler> logger)
             {
+                _logger = logger;
             }
 
             public async Task<IEnumerable<Breach>> Handle(Query request, CancellationToken cancellationToken)
@@ -43,7 +46,18 @@ namespace Breach.Api.Features.Breaches
                 }
                 catch (FlurlHttpException ex) when (ex.StatusCode == 404)
                 {
+                    _logger.LogInformation("No breaches found for the given criteria (404 Not Found).");
                     return new List<Breach>(); // Return empty list if no breaches found
+                }
+                catch (FlurlHttpException ex)
+                {
+                    _logger.LogError(ex, "Flurl HTTP error occurred while fetching breaches: {StatusCode} - {Message}", ex.StatusCode, ex.Message);
+                    throw; // Re-throw the exception after logging
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "An unexpected error occurred while fetching breaches.");
+                    throw; // Re-throw the exception after logging
                 }
             }
         }

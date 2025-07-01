@@ -1,8 +1,21 @@
 <div class="container">
   <h1>Breach Viewer</h1>
   <div class="search-container">
-    <input type="text" [(ngModel)]="breachName" placeholder="Enter breach name" />
-    <button (click)="search()" [disabled]="loading">Search</button>
+    <input
+      type="text"
+      [(ngModel)]="breachName"
+      placeholder="Enter breach name"
+    />
+    <button (click)="search()" [disabled]="loading">Search by Name</button>
+  </div>
+
+  <div class="search-container">
+    <input
+      type="email"
+      [(ngModel)]="email"
+      placeholder="Enter email for breach search"
+    />
+    <button (click)="searchByEmail()" [disabled]="loading">Search by Email</button>
   </div>
 
   <div *ngIf="loading" class="loading">Loading...</div>
@@ -24,6 +37,23 @@
       <p>{{ riskAnalysis }}</p>
     </div>
 
-    <button (click)="generateReport()" [disabled]="!riskAnalysis">Generate Report</button>
+    <button (click)="generateReport()" [disabled]="!riskAnalysis">
+      Generate Report
+    </button>
+  </div>
+
+  <div *ngIf="breachesByEmail && breachesByEmail.length > 0" class="breaches-by-email-container">
+    <h2>Breaches for {{ email }}</h2>
+    <div *ngFor="let breach of breachesByEmail" class="breach-item">
+      <h3>{{ breach.title }}</h3>
+      <p><strong>Domain:</strong> {{ breach.domain }}</p>
+      <p><strong>Breach Date:</strong> {{ breach.breachDate | date }}</p>
+      <p><strong>Pwn Count:</strong> {{ breach.pwnCount | number }}</p>
+      <p><strong>Description:</strong> {{ breach.description }}</p>
+      <p><strong>Data Classes:</strong></p>
+      <ul>
+        <li *ngFor="let dataClass of breach.dataClasses">{{ dataClass }}</li>
+      </ul>
+    </div>
   </div>
 </div>

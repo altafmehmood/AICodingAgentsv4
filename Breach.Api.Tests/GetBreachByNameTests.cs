@@ -1,4 +1,5 @@
 
+using Microsoft.Extensions.Logging;
 using Xunit;
 using NSubstitute;
 using System.Threading.Tasks;
@@ -17,7 +18,8 @@ namespace Breach.Api.Tests
         {
             // Arrange
             using var httpTest = new HttpTest();
-            var handler = new GetBreachByName.Handler();
+            var logger = Substitute.For<ILogger<GetBreachByName.Handler>>();
+            var handler = new GetBreachByName.Handler(logger);
             var query = new GetBreachByName.Query("Adobe");
 
             var expectedBreach = new GetBreachByName.Breach

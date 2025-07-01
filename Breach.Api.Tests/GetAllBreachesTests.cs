@@ -1,4 +1,5 @@
 
+using Microsoft.Extensions.Logging;
 using Xunit;
 using NSubstitute;
 using System.Threading.Tasks;
@@ -19,7 +20,8 @@ namespace Breach.Api.Tests
         {
             // Arrange
             using var httpTest = new HttpTest();
-            var handler = new GetAllBreaches.Handler();
+            var logger = Substitute.For<ILogger<GetAllBreaches.Handler>>();
+            var handler = new GetAllBreaches.Handler(logger);
             var query = new GetAllBreaches.Query(null, null);
 
             var expectedBreaches = new List<GetAllBreaches.Breach>
@@ -74,7 +76,8 @@ namespace Breach.Api.Tests
         {
             // Arrange
             using var httpTest = new HttpTest();
-            var handler = new GetAllBreaches.Handler();
+            var logger = Substitute.For<ILogger<GetAllBreaches.Handler>>();
+            var handler = new GetAllBreaches.Handler(logger);
             var fromDate = new DateTime(2015, 1, 1);
             var query = new GetAllBreaches.Query(fromDate, null);
 
@@ -114,7 +117,8 @@ namespace Breach.Api.Tests
         {
             // Arrange
             using var httpTest = new HttpTest();
-            var handler = new GetAllBreaches.Handler();
+            var logger = Substitute.For<ILogger<GetAllBreaches.Handler>>();
+            var handler = new GetAllBreaches.Handler(logger);
             var toDate = new DateTime(2015, 1, 1);
             var query = new GetAllBreaches.Query(null, toDate);
 
@@ -154,7 +158,8 @@ namespace Breach.Api.Tests
         {
             // Arrange
             using var httpTest = new HttpTest();
-            var handler = new GetAllBreaches.Handler();
+            var logger = Substitute.For<ILogger<GetAllBreaches.Handler>>();
+            var handler = new GetAllBreaches.Handler(logger);
             var fromDate = new DateTime(2015, 1, 1);
             var toDate = new DateTime(2020, 1, 1);
             var query = new GetAllBreaches.Query(fromDate, toDate);
@@ -195,7 +200,8 @@ namespace Breach.Api.Tests
         {
             // Arrange
             using var httpTest = new HttpTest();
-            var handler = new GetAllBreaches.Handler();
+            var logger = Substitute.For<ILogger<GetAllBreaches.Handler>>();
+            var handler = new GetAllBreaches.Handler(logger);
             var query = new GetAllBreaches.Query(null, null);
 
             httpTest.RespondWith("", 404);

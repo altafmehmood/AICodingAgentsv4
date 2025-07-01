@@ -53,5 +53,13 @@ namespace Breach.Api.Controllers
             var result = await _mediator.Send(query);
             return Ok(result);
         }
+
+        [HttpGet("email/{email}")]
+        public async Task<IActionResult> GetBreachesByEmail(string email)
+        {
+            var query = new GetBreachesByEmail.Query(email);
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
     }
 }
