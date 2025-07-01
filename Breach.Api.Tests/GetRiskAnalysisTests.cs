@@ -4,6 +4,7 @@ using NSubstitute;
 using System.Threading.Tasks;
 using Breach.Api.Features.Breaches;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.Threading;
 using Flurl.Http.Testing;
 
@@ -18,8 +19,9 @@ namespace Breach.Api.Tests
             using var httpTest = new HttpTest();
             var configuration = Substitute.For<IConfiguration>();
             configuration["ClaudeApiKey"].Returns("test_key");
+            var logger = Substitute.For<ILogger<GetRiskAnalysis.Handler>>();
 
-            var handler = new GetRiskAnalysis.Handler(configuration);
+            var handler = new GetRiskAnalysis.Handler(configuration, logger);
             var query = new GetRiskAnalysis.Query("Some breach description");
 
             var expectedResponse = new GetRiskAnalysis.ClaudeResponse
