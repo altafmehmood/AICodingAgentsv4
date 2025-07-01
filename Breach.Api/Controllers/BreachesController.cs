@@ -1,8 +1,9 @@
-
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Breach.Api.Features.Breaches;
+using System;
+using System.Collections.Generic;
 
 namespace Breach.Api.Controllers
 {
@@ -43,6 +44,14 @@ namespace Breach.Api.Controllers
         {
             var result = await _mediator.Send(query);
             return File(result, "application/pdf", "breach-report.pdf");
+        }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllBreaches([FromQuery] DateTime? fromDate, [FromQuery] DateTime? toDate)
+        {
+            var query = new GetAllBreaches.Query(fromDate, toDate);
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
     }
 }
