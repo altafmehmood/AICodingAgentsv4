@@ -10,26 +10,21 @@ namespace Breach.Api.Features.Breaches
 {
     public static class GetBreachByName
     {
-        public record Query(string Name) : IRequest<Breach>;
+        public record Query(string Name) : IRequest<Breach?>;
 
-        public class Handler : IRequestHandler<Query, Breach>
+        public class Handler : IRequestHandler<Query, Breach?>
         {
-            private readonly IConfiguration _configuration;
-
-            public Handler(IConfiguration configuration)
+            public Handler()
             {
-                _configuration = configuration;
             }
 
-            public async Task<Breach> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Breach?> Handle(Query request, CancellationToken cancellationToken)
             {
-                var apiKey = _configuration["HaveIBeenPwnedApiKey"];
                 var baseUrl = "https://haveibeenpwned.com/api/v3/breach/";
 
                 try
                 {
-                    var breach = await baseUrl
-                        .WithHeader("hibp-api-key", apiKey)
+                    var breach = await new Flurl.Url(baseUrl)
                         .AppendPathSegment(request.Name)
                         .GetJsonAsync<Breach>(cancellationToken: cancellationToken);
 

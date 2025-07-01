@@ -15,21 +15,17 @@ namespace Breach.Api.Features.Breaches
 
         public class Handler : IRequestHandler<Query, IEnumerable<Breach>>
         {
-            private readonly IConfiguration _configuration;
-
-            public Handler(IConfiguration configuration)
+            public Handler()
             {
-                _configuration = configuration;
             }
 
             public async Task<IEnumerable<Breach>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var apiKey = _configuration["HaveIBeenPwnedApiKey"];
                 var baseUrl = "https://haveibeenpwned.com/api/v3/breaches"; // Assuming this is the endpoint for all breaches
 
                 try
                 {
-                    var requestUrl = baseUrl.WithHeader("hibp-api-key", apiKey);
+                    var requestUrl = new Flurl.Url(baseUrl);
 
                     if (request.FromDate.HasValue)
                     {
