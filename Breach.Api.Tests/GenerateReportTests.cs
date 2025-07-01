@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Breach.Api.Features.Breaches;
 using System.Threading;
 using System;
+using NSubstitute;
+using Microsoft.Extensions.Logging;
 
 namespace Breach.Api.Tests
 {
@@ -31,7 +33,7 @@ namespace Breach.Api.Tests
             };
             var riskAnalysis = "This is a risk analysis.";
 
-            var handler = new GenerateReport.Handler();
+            var handler = new GenerateReport.Handler(Substitute.For<ILogger<GenerateReport.Handler>>());
             var query = new GenerateReport.Query(breach, riskAnalysis);
 
             // Act
